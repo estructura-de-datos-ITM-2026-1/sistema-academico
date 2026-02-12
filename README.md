@@ -1,18 +1,4 @@
-## Getting Started
+# Sistema academico
+Un colegio requiere un sistema de información que permita administrar la información académica de los estudiantes, profesores y asignaturas ofertadas. El sistema debe permitir manejar la información personal y de contacto de profesores y estudiantes. La información personal incluye el nombre, número de identificación y fecha de nacimiento (mes, día y año); y la información de contacto incluye la dirección de residencia, teléfono y correo electrónico. Adicionalmente, para cada docente se registra la fecha de vinculación al colegio y el número de cursos dictados en el periodo actual; máximo un docente puede tener 5 cursos durante un periodo académico. Por su parte, de cada estudiante se registra la fecha de matrícula, el número de cursos actualmente matriculado, y el costo total de matrícula. Por su parte, a las asignaturas se les asigna un código de identificación, y se almacena el horario (día y hora), así como el cupo máximo de estudiantes.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
 
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
