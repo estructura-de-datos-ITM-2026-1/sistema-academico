@@ -3,7 +3,7 @@ public class Asignatura {
     private String codigo;
     private int creditos;
     private int numeroGrupos;
-    private String horario;
+    private Horario horario;
 
     // Atributo estatico para el numero maximo de estudiantes por grupo
     private static final int MAXIMO_NUMERO_ESTUDIANTES = 30;
@@ -12,10 +12,11 @@ public class Asignatura {
     public Asignatura() {
     }
 
-    public Asignatura(String nombre, String codigo, int creditos) {
+    public Asignatura(String nombre, String codigo, int creditos, Horario horario) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.creditos = creditos;
+        this.horario = horario;
     }
 
     // Getters
@@ -35,7 +36,7 @@ public class Asignatura {
         return numeroGrupos;
     }
 
-    public String getHorario() {
+    public Horario getHorario() {
         return horario;
     }
 
@@ -52,7 +53,7 @@ public class Asignatura {
         this.numeroGrupos = numeroGrupos;
     }
 
-    public void setHorario(String horario) {
+    public void setHorario(Horario horario) {
         this.horario = horario;
     }
 

@@ -1,53 +1,17 @@
 import java.time.LocalDate;
 
-public class Docente {
-    private String nombre;
-    private String apellido;
-    private LocalDate fechaNacimiento;
-    private String direccion;
-    private String telefono;
-    private String correo;
+public class Docente extends Persona {
     private LocalDate fechaVinculacion;
     private int numeroCursos;
 
-    // Constructor vacío
-    public Docente() {
-    }
-
     // Constructor con parámetros
-    public Docente(String nombre, String apellido, String correo) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.fechaVinculacion = LocalDate.now(); // Asignar la fecha actual como fecha de vinculación
+    public Docente(String nombre, String apellido, int numeroCursos) {
+        super(nombre, apellido);
+        this.fechaVinculacion = LocalDate.now();
+        this.numeroCursos = numeroCursos;
     }
 
     // Getters
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
     public LocalDate getFechaVinculacion() {
         return fechaVinculacion;
     }
@@ -57,32 +21,17 @@ public class Docente {
     }
 
     // Setters
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    public void setFechaVinculacion(LocalDate fechaVinculacion) {
+        this.fechaVinculacion = fechaVinculacion;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public void setNumeroCursos(byte numeroCursos) {
+    public void setNumeroCursos(int numeroCursos) {
         this.numeroCursos = numeroCursos;
+    }
+
+    public void verDetalleCurso(String curso) {
+        System.out.println("El docente " + getNombre() + " está viendo el detalle del curso: " + curso);
     }
 
 }
