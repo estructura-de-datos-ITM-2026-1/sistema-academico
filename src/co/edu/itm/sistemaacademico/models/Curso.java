@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 public class Curso {
     private int codigoCurso;
     private String periodo;

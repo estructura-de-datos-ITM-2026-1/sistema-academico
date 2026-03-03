@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 public class Horario {
     private int dia;
     private int horaInicio;

@@ -1,3 +1,4 @@
+package co.edu.itm.sistemaacademico.models;
 import java.time.LocalDate;
 
 public class Estudiante extends Persona {

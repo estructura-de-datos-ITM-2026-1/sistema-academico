@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 public class Administrador extends Persona {
     private String facultad;
 

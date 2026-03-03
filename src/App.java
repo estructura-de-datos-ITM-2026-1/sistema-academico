@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 
+import co.edu.itm.sistemaacademico.models.Estudiante;
+
 public class App {
     public static void main(String[] args) throws Exception {
         Estudiante estudiante = new Estudiante("Santiago", "Suarez", LocalDate.of(2000, 5, 15), "Calle 123", "555-1234",
