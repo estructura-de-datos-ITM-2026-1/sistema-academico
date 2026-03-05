@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 public class Asignatura {
     private String nombre;
     private String codigo;

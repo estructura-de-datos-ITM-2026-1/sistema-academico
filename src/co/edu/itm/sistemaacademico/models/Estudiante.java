@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 import java.time.LocalDate;
 
 public class Estudiante extends Persona {
@@ -10,6 +12,10 @@ public class Estudiante extends Persona {
         super(nombre, apellido, fechaNacimiento, direccion, telefono, correo);
         this.promedio = promedio;
         this.semestre = semestre;
+    }
+
+    public Estudiante(String nombre, String apellido) {
+        super(nombre, apellido);
     }
 
     public void matricularCurso(String curso) {

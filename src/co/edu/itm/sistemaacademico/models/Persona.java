@@ -1,3 +1,5 @@
+package co.edu.itm.sistemaacademico.models;
+
 import java.time.LocalDate;
 
 public class Persona {
@@ -26,7 +28,6 @@ public class Persona {
         this.correo = correo;
     }
 
-    // Getters
     public String getNombre() {
         return nombre;
     }
@@ -51,7 +52,6 @@ public class Persona {
         return correo;
     }
 
-    // Setters
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -80,5 +80,4 @@ public class Persona {
         System.out.println("Nombre: " + this.nombre);
         System.out.println("Apellido: " + this.apellido);
     }
-
 }
