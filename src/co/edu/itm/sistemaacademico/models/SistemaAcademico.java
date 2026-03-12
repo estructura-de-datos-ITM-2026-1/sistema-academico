@@ -22,14 +22,6 @@ public class SistemaAcademico {
         }
     }
 
-    public void agregarEstudiante(Estudiante estudiante, int posicion) {
-        this.estudiantes.agregarElementoEnPosicion(estudiante, posicion);
-    }
-
-    public int getCantidadEstudiantes() {
-        return this.estudiantes.getTamaño();
-    }
-
     public void listarEstudiantes() {
         Nodo nodoActual = this.estudiantes.getCabeza(); // Se crea una variable nodoActual que se inicializa con la
                                                         // cabeza de la lista
@@ -41,26 +33,4 @@ public class SistemaAcademico {
             nodoActual = nodoActual.getSiguiente();
         }
     }
-
-    public Estudiante buscarEstudiantePorIdentificacion(String identificacion) {
-        Nodo nodoActual = this.estudiantes.getCabeza();
-        while (nodoActual != null) {
-            Estudiante estudiante = (Estudiante) nodoActual.getDato();
-            if (estudiante.getIdentificacion().equals(identificacion)) {
-                return estudiante;
-            }
-            nodoActual = nodoActual.getSiguiente();
-        }
-        return null; // Retorna null si no se encuentra el estudiante
-    }
-
-    public String actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
-        Estudiante estudiante = buscarEstudiantePorIdentificacion(identificacion);
-        estudiante.setDireccion(nuevaDireccion);
-        return "La dirección del estudiante con identificación " + identificacion + " ha sido actualizada a: "
-                + nuevaDireccion;
-    }
-
-    // Metodo actualizar telefono estudiante
-
 }

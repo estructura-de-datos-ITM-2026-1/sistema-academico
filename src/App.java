@@ -8,12 +8,8 @@ public class App {
             Elija una opción:
             1. Agregar estudiante al final de la lista
             2. Agregar estudiante al inicio de la lista
-            3. Agregar estudiante en una posición específica
-            4. Buscar estudiante por identificación
-            5. Actualizar dirección de estudiante
-            6. Listar estudiantes
-            7. Ver cantidad de estudiantes
-            8. Salir
+            3. Listar estudiantes
+            4. Salir
             """;
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -36,8 +32,7 @@ public class App {
         while (true) {
 
             System.out.println("\n" + MENU);
-            int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea después de leer el número
+            int opcion = Integer.parseInt(scanner.nextLine());
 
             switch (opcion) {
                 case 1:
@@ -53,43 +48,13 @@ public class App {
                             + estudianteInicio.getApellido());
                     break;
                 case 3:
-                    Estudiante estudiantePosicion = crearEstudianteDesdeEntrada();
-                    System.out.println("Ingrese la posición donde desea agregar el estudiante:");
-                    int posicion = scanner.nextInt();
-                    scanner.nextLine(); // Consumir el salto de línea después de leer el número
-                    sistemaAcademico.agregarEstudiante(estudiantePosicion, posicion - 1); // Restar 1 para ajustar a
-                                                                                          // índice basado en cero
-                    System.out.println("Estudiante agregado en la posición " + posicion + ": "
-                            + estudiantePosicion.getNombre() + " " + estudiantePosicion.getApellido());
-                    break;
-                case 4:
-                    System.out.println("Ingrese la identificación del estudiante:");
-                    String identificacion = scanner.nextLine();
-                    Estudiante estudianteBuscado = sistemaAcademico.buscarEstudiantePorIdentificacion(identificacion);
-                    if (estudianteBuscado != null) {
-                        System.out.println("Estudiante encontrado: " + estudianteBuscado.getNombre() + " "
-                                + estudianteBuscado.getApellido());
-                    } else {
-                        System.out.println("No se encontró un estudiante con la identificación: " + identificacion);
-                    }
-                    break;
-                case 5:
-                    System.out.println("Ingrese la identificación del estudiante:");
-                    String identificacionActualizar = scanner.nextLine();
-                    System.out.println("Ingrese la nueva dirección del estudiante:");
-                    String nuevaDireccion = scanner.nextLine();
-                    String resultado = sistemaAcademico.actualizarDireccionEstudiante(identificacionActualizar,
-                            nuevaDireccion);
-                    System.out.println(resultado);
-                    break;
-                case 6:
                     System.out.println("Lista de estudiantes:");
                     sistemaAcademico.listarEstudiantes();
                     break;
-                case 7:
-                    int cantidadEstudiantes = sistemaAcademico.getCantidadEstudiantes();
-                    System.out.println("Cantidad de estudiantes: " + cantidadEstudiantes);
-                    break;
+                case 4:
+                    System.out.println("Saliendo del sistema académico...");
+                    scanner.close();
+                    return;
                 default:
                     System.out.println("Opción no válida. Por favor, intente de nuevo.");
                     break;
