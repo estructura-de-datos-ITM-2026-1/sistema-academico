@@ -9,7 +9,9 @@ public class App {
             1. Agregar estudiante al final de la lista
             2. Agregar estudiante al inicio de la lista
             3. Listar estudiantes
-            4. Salir
+            4. Buscar estudiante por identificación
+            5. Actualizar dirección de estudiante
+            6. Salir
             """;
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -20,8 +22,9 @@ public class App {
         String apellido = scanner.nextLine();
         System.out.println("Ingrese la identificación del estudiante:");
         String identificacion = scanner.nextLine();
-
-        return new Estudiante(nombre, apellido, identificacion);
+        System.out.println("Ingrese la dirección del estudiante:");
+        String direccion = scanner.nextLine();
+        return new Estudiante(nombre, apellido, identificacion, direccion);
     }
 
     public static void main(String[] args) throws Exception {
@@ -52,6 +55,24 @@ public class App {
                     sistemaAcademico.listarEstudiantes();
                     break;
                 case 4:
+                    System.out.println("Ingrese la identificación del estudiante:");
+                    String identificacion = scanner.nextLine();
+                    Estudiante estudianteBuscado = sistemaAcademico.buscarEstudiantePorIdentificacion(identificacion);
+                    if (estudianteBuscado != null) {
+                        System.out.println("Estudiante encontrado:");
+                        estudianteBuscado.mostrarInformacion();
+                    } else {
+                        System.out.println("Estudiante con identificación " + identificacion + " no encontrado.");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Ingrese la identificación del estudiante:");
+                    String idActualizar = scanner.nextLine();
+                    System.out.println("Ingrese la nueva dirección del estudiante:");
+                    String nuevaDireccion = scanner.nextLine();
+                    sistemaAcademico.actualizarDireccionEstudiante(idActualizar, nuevaDireccion);
+                    break;
+                case 6:
                     System.out.println("Saliendo del sistema académico...");
                     scanner.close();
                     return;

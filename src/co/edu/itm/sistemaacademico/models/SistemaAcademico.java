@@ -10,6 +10,7 @@ public class SistemaAcademico {
         this.estudiantes = new ListaEnlazada();
     }
 
+    // Metodos para crear estudiantes - Create
     public void agregarEstudiante(Estudiante estudiante) {
         this.estudiantes.agregarElementoAlFinal(estudiante);
     }
@@ -22,15 +23,38 @@ public class SistemaAcademico {
         }
     }
 
+    // Metodo para listar estudiantes - Read
     public void listarEstudiantes() {
-        Nodo nodoActual = this.estudiantes.getCabeza(); // Se crea una variable nodoActual que se inicializa con la
-                                                        // cabeza de la lista
+        Nodo nodoActual = this.estudiantes.getCabeza();
         while (nodoActual != null) {
-            Estudiante estudiante = (Estudiante) nodoActual.getDato(); // Se obtiene el estudiante del nodo actual y se
-                                                                       // imprime su información
-            System.out.println("Nombre: " + estudiante.getNombre() + " " + estudiante.getApellido()
-                    + ", Identificación: " + estudiante.getIdentificacion());
+            Estudiante estudiante = (Estudiante) nodoActual.getDato();
+            System.out.println("DATOS DEL ESTUDIANTE:");
+            estudiante.mostrarInformacion();
             nodoActual = nodoActual.getSiguiente();
         }
+    }
+
+    // Metodo para buscar un estudiante por su identificacion - Read
+    public Estudiante buscarEstudiantePorIdentificacion(String identificacion) {
+        Nodo nodoActual = this.estudiantes.getCabeza();
+        while (nodoActual != null) {
+            Estudiante estudiante = (Estudiante) nodoActual.getDato();
+            if (estudiante.getIdentificacion().equals(identificacion)) {
+                return estudiante;
+            }
+            nodoActual = nodoActual.getSiguiente();
+        }
+        return null; // Retorna null si no se encuentra el estudiante
+    }
+
+    // Metodo para actualizar la dirección de un estudiante - Update
+    public void actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
+        Estudiante estudiante = buscarEstudiantePorIdentificacion(identificacion);
+        if (estudiante != null) {
+            estudiante.setDireccion(nuevaDireccion);
+        } else {
+            System.out.println("Estudiante con identificación " + identificacion + " no encontrado.");
+        }
+
     }
 }

@@ -5,8 +5,8 @@ public class Estudiante extends Persona {
     private float promedio;
     private int semestre;
 
-    public Estudiante(String nombre, String apellido, String identificacion) {
-        super(nombre, apellido, identificacion);
+    public Estudiante(String nombre, String apellido, String identificacion, String direccion) {
+        super(nombre, apellido, identificacion, direccion);
         this.promedio = 0.0f;
         this.semestre = 1;
     }

@@ -14,10 +14,11 @@ public class Persona {
     public Persona() {
     }
 
-    public Persona(String nombre, String apellido, String identificacion) {
+    public Persona(String nombre, String apellido, String identificacion, String direccion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.identificacion = identificacion;
+        this.direccion = direccion;
     }
 
     public Persona(String nombre, String apellido, String identificacion, LocalDate fechaNacimiento, String direccion,
@@ -91,5 +92,6 @@ public class Persona {
         System.out.println("Nombre: " + this.nombre);
         System.out.println("Apellido: " + this.apellido);
         System.out.println("Identificación: " + this.identificacion);
+        System.out.println("Dirección: " + this.direccion);
     }
 }
