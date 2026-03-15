@@ -1,17 +1,21 @@
 import java.util.Scanner;
 
+import co.edu.itm.sistemaacademico.models.Curso;
 import co.edu.itm.sistemaacademico.models.Estudiante;
 import co.edu.itm.sistemaacademico.models.SistemaAcademico;
 
 public class App {
     private static final String MENU = """
             Elija una opción:
-            1. Agregar estudiante al final de la lista
-            2. Agregar estudiante al inicio de la lista
-            3. Listar estudiantes
-            4. Buscar estudiante por identificación
-            5. Actualizar dirección de estudiante
-            6. Salir
+            1. Agregar estudiante
+            2. Crear curso
+            3. Buscar estudiante por identificación
+            4. Actualizar dirección de estudiante
+            5. Listar estudiantes
+            6. Matricular estudiante en curso
+            7. Listar cursos matriculados por estudiante
+            8. Listar cursos
+            9. Salir
             """;
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -45,16 +49,17 @@ public class App {
                             .println("Estudiante agregado: " + estudiante.getNombre() + " " + estudiante.getApellido());
                     break;
                 case 2:
-                    Estudiante estudianteInicio = crearEstudianteDesdeEntrada();
-                    sistemaAcademico.agregarEstudiante(estudianteInicio, true);
-                    System.out.println("Estudiante agregado al inicio: " + estudianteInicio.getNombre() + " "
-                            + estudianteInicio.getApellido());
+                    System.out.println("Ingrese el código del curso: ");
+                    int codigoCurso = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Ingrese el nombre del curso: ");
+                    String nombreCurso = scanner.nextLine();
+                    System.out.println("Ingrese los créditos del curso: ");
+                    int creditos = Integer.parseInt(scanner.nextLine());
+                    Curso curso = new Curso(codigoCurso, nombreCurso, creditos);
+                    sistemaAcademico.agregarCurso(curso);
+                    System.out.println("Curso agregado: " + curso.getNombreCurso());
                     break;
                 case 3:
-                    System.out.println("Lista de estudiantes:");
-                    sistemaAcademico.listarEstudiantes();
-                    break;
-                case 4:
                     System.out.println("Ingrese la identificación del estudiante:");
                     String identificacion = scanner.nextLine();
                     Estudiante estudianteBuscado = sistemaAcademico.buscarEstudiantePorIdentificacion(identificacion);
@@ -65,14 +70,51 @@ public class App {
                         System.out.println("Estudiante con identificación " + identificacion + " no encontrado.");
                     }
                     break;
-                case 5:
+                case 4:
                     System.out.println("Ingrese la identificación del estudiante:");
                     String idActualizar = scanner.nextLine();
                     System.out.println("Ingrese la nueva dirección del estudiante:");
                     String nuevaDireccion = scanner.nextLine();
                     sistemaAcademico.actualizarDireccionEstudiante(idActualizar, nuevaDireccion);
                     break;
+                case 5:
+                    System.out.println("Lista de estudiantes:");
+                    sistemaAcademico.listarEstudiantes();
+                    break;
                 case 6:
+                    System.out.println("Ingrese la identificación del estudiante:");
+                    String idMatricular = scanner.nextLine();
+                    Estudiante estudianteMatricular = sistemaAcademico.buscarEstudiantePorIdentificacion(idMatricular);
+                    if (estudianteMatricular == null) {
+                        System.out.println("Estudiante con identificación " + idMatricular + " no encontrado.");
+                        break;
+                    }
+                    System.out.println("Ingrese el código del curso:");
+                    int codigoMatricular = Integer.parseInt(scanner.nextLine());
+                    Curso cursoMatricular = sistemaAcademico.buscarCursoPorCodigo(codigoMatricular);
+                    if (cursoMatricular == null) {
+                        System.out.println("Curso con código " + codigoMatricular + " no encontrado.");
+                        break;
+                    }
+                    estudianteMatricular.matricularCurso(cursoMatricular);
+                    System.out.println("Estudiante " + estudianteMatricular.getNombre() + " matriculado en el curso "
+                            + cursoMatricular.getNombreCurso());
+                    break;
+                case 7:
+                    System.out.println("Ingrese la identificación del estudiante:");
+                    String idListar = scanner.nextLine();
+                    Estudiante estudianteListar = sistemaAcademico.buscarEstudiantePorIdentificacion(idListar);
+                    if (estudianteListar == null) {
+                        System.out.println("Estudiante con identificación " + idListar + " no encontrado.");
+                        break;
+                    }
+                    estudianteListar.listarCursosMatriculados();
+                    break;
+                case 8:
+                    System.out.println("Lista de cursos:");
+                    sistemaAcademico.listarCursos();
+                    break;
+                case 9:
                     System.out.println("Saliendo del sistema académico...");
                     scanner.close();
                     return;

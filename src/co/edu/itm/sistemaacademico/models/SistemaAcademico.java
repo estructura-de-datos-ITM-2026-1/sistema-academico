@@ -5,9 +5,13 @@ import co.edu.itm.sistemaacademico.estructuras.Nodo;
 
 public class SistemaAcademico {
     private ListaEnlazada estudiantes;
+    private ListaEnlazada docentes;
+    private ListaEnlazada cursos;
 
     public SistemaAcademico() {
         this.estudiantes = new ListaEnlazada();
+        this.docentes = new ListaEnlazada();
+        this.cursos = new ListaEnlazada();
     }
 
     // Metodos para crear estudiantes - Create
@@ -55,6 +59,64 @@ public class SistemaAcademico {
         } else {
             System.out.println("Estudiante con identificación " + identificacion + " no encontrado.");
         }
-
     }
+
+    // CRUD para docentes
+    public void agregarDocente(Docente docente) {
+        this.docentes.agregarElementoAlFinal(docente);
+    }
+
+    public void listarDocentes() {
+        Nodo nodoActual = this.docentes.getCabeza();
+        while (nodoActual != null) {
+            Docente docente = (Docente) nodoActual.getDato();
+            System.out.println("DATOS DEL DOCENTE:");
+            docente.mostrarInformacion();
+            nodoActual = nodoActual.getSiguiente();
+        }
+    }
+
+    public Docente buscarDocentePorIdentificacion(String identificacion) {
+        Nodo nodoActual = this.docentes.getCabeza();
+        while (nodoActual != null) {
+            Docente docente = (Docente) nodoActual.getDato();
+            if (docente.getIdentificacion().equals(identificacion)) {
+                return docente;
+            }
+            nodoActual = nodoActual.getSiguiente();
+        }
+        return null; // Retorna null si no se encuentra el docente
+    }
+
+    // Aca va el metodo eliminar docente - Delete
+
+    // CRUD para cursos
+    public void agregarCurso(Curso curso) {
+        this.cursos.agregarElementoAlFinal(curso);
+    }
+
+    public void listarCursos() {
+        Nodo nodoActual = this.cursos.getCabeza();
+        while (nodoActual != null) {
+            Curso curso = (Curso) nodoActual.getDato();
+            System.out.println("DATOS DEL CURSO:");
+            curso.mostrarInformacion();
+            nodoActual = nodoActual.getSiguiente();
+        }
+    }
+
+    public Curso buscarCursoPorCodigo(int codigoCurso) {
+        Nodo nodoActual = this.cursos.getCabeza();
+        while (nodoActual != null) {
+            Curso curso = (Curso) nodoActual.getDato();
+            if (curso.getCodigoCurso() == codigoCurso) {
+                return curso;
+            }
+            nodoActual = nodoActual.getSiguiente();
+        }
+        return null; // Retorna null si no se encuentra el curso
+    }
+
+    // Aca va el metodo eliminar curso - Delete
+
 }

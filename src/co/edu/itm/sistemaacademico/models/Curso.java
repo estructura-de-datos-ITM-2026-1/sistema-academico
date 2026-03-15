@@ -1,20 +1,25 @@
 package co.edu.itm.sistemaacademico.models;
 
+import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
+
 public class Curso {
     private int codigoCurso;
-    private String periodo;
+    private String nombreCurso;
+    private int creditos;
+    private String horario;
     private String aula;
     private Docente docente;
-    private Asignatura asignatura;
+    private ListaEnlazada estudiantesMatriculados;
 
     public Curso() {
+        this.estudiantesMatriculados = new ListaEnlazada();
     }
 
-    public Curso(int codigoCurso, String periodo, String aula, Asignatura asignatura) {
+    public Curso(int codigoCurso, String nombreCurso, int creditos) {
         this.codigoCurso = codigoCurso;
-        this.periodo = periodo;
-        this.aula = aula;
-        this.asignatura = asignatura;
+        this.nombreCurso = nombreCurso;
+        this.creditos = creditos;
+        this.estudiantesMatriculados = new ListaEnlazada();
     }
 
     public int getCodigoCurso() {
@@ -25,12 +30,28 @@ public class Curso {
         this.codigoCurso = codigoCurso;
     }
 
-    public String getPeriodo() {
-        return periodo;
+    public String getNombreCurso() {
+        return nombreCurso;
     }
 
-    public void setPeriodo(String periodo) {
-        this.periodo = periodo;
+    public void setNombreCurso(String nombreCurso) {
+        this.nombreCurso = nombreCurso;
+    }
+
+    public int getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
+    }
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 
     public String getAula() {
@@ -49,12 +70,18 @@ public class Curso {
         this.docente = docente;
     }
 
-    public Asignatura getAsignatura() {
-        return asignatura;
+    public ListaEnlazada getEstudiantesMatriculados() {
+        return estudiantesMatriculados;
     }
 
-    public void setAsignatura(Asignatura asignatura) {
-        this.asignatura = asignatura;
+    public void agregarEstudiante(Estudiante estudiante) {
+        estudiantesMatriculados.agregarElementoAlFinal(estudiante);
+    }
+
+    public void mostrarInformacion() {
+        System.out.println("Codigo del curso: " + codigoCurso);
+        System.out.println("Nombre del curso: " + nombreCurso);
+        System.out.println("Creditos: " + creditos);
     }
 
 }
