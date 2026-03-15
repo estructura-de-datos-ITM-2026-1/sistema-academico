@@ -2,19 +2,21 @@ package co.edu.itm.sistemaacademico.models;
 
 public class Curso {
     private int codigoCurso;
+    private String nombreCurso;
+    private int creditos;
+    private String horario;
     private String periodo;
     private String aula;
     private Docente docente;
-    private Asignatura asignatura;
+    // 1. Crear lista enlazada para estudiantes
 
     public Curso() {
     }
 
-    public Curso(int codigoCurso, String periodo, String aula, Asignatura asignatura) {
+    public Curso(int codigoCurso, String nombreCurso, int creditos) {
         this.codigoCurso = codigoCurso;
-        this.periodo = periodo;
-        this.aula = aula;
-        this.asignatura = asignatura;
+        this.nombreCurso = nombreCurso;
+        this.creditos = creditos;
     }
 
     public int getCodigoCurso() {
@@ -23,6 +25,30 @@ public class Curso {
 
     public void setCodigoCurso(int codigoCurso) {
         this.codigoCurso = codigoCurso;
+    }
+
+    public String getNombreCurso() {
+        return nombreCurso;
+    }
+
+    public void setNombreCurso(String nombreCurso) {
+        this.nombreCurso = nombreCurso;
+    }
+
+    public int getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
+    }
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 
     public String getPeriodo() {
@@ -47,14 +73,6 @@ public class Curso {
 
     public void setDocente(Docente docente) {
         this.docente = docente;
-    }
-
-    public Asignatura getAsignatura() {
-        return asignatura;
-    }
-
-    public void setAsignatura(Asignatura asignatura) {
-        this.asignatura = asignatura;
     }
 
 }
