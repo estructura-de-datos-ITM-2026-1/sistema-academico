@@ -1,22 +1,25 @@
 package co.edu.itm.sistemaacademico.models;
 
+import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
+
 public class Curso {
     private int codigoCurso;
     private String nombreCurso;
     private int creditos;
     private String horario;
-    private String periodo;
     private String aula;
     private Docente docente;
-    // 1. Crear lista enlazada para estudiantes
+    private ListaEnlazada estudiantesMatriculados;
 
     public Curso() {
+        this.estudiantesMatriculados = new ListaEnlazada();
     }
 
     public Curso(int codigoCurso, String nombreCurso, int creditos) {
         this.codigoCurso = codigoCurso;
         this.nombreCurso = nombreCurso;
         this.creditos = creditos;
+        this.estudiantesMatriculados = new ListaEnlazada();
     }
 
     public int getCodigoCurso() {
@@ -51,14 +54,6 @@ public class Curso {
         this.horario = horario;
     }
 
-    public String getPeriodo() {
-        return periodo;
-    }
-
-    public void setPeriodo(String periodo) {
-        this.periodo = periodo;
-    }
-
     public String getAula() {
         return aula;
     }
@@ -73,6 +68,20 @@ public class Curso {
 
     public void setDocente(Docente docente) {
         this.docente = docente;
+    }
+
+    public ListaEnlazada getEstudiantesMatriculados() {
+        return estudiantesMatriculados;
+    }
+
+    public void agregarEstudiante(Estudiante estudiante) {
+        estudiantesMatriculados.agregarElementoAlFinal(estudiante);
+    }
+
+    public void mostrarInformacion() {
+        System.out.println("Codigo del curso: " + codigoCurso);
+        System.out.println("Nombre del curso: " + nombreCurso);
+        System.out.println("Creditos: " + creditos);
     }
 
 }
