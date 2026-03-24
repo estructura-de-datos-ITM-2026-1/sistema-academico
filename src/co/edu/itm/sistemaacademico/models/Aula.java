@@ -1,14 +1,20 @@
+import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
+
 public class Aula {
     private String codigo;
     private String ubicacion;
-    private String grupos;
+    private ListaEnlazada grupos;
     private  boolean tieneAireAcondicionado;
     private boolean esBLearning;
+
+
+    public Aula() {
+        this.grupos = new ListaEnlazada();
+    }
 
     public Aula(String codigo, String ubicacion, String grupos, boolean tieneAireAcondicionado, boolean esBLearning) {
         this.codigo = codigo;
         this.ubicacion = ubicacion;
-        this.grupos = grupos;
         this.tieneAireAcondicionado = tieneAireAcondicionado;
         this.esBLearning = esBLearning;
     }
@@ -51,7 +57,11 @@ public class Aula {
 
     public void setEsBLearning(boolean esBLearning) {
         this.esBLearning = esBLearning;
-    } 
+    }
+
+    public String reservarAula() {
+        return "Aula reservada";
+    }
 
     
     
