@@ -1,5 +1,9 @@
 package co.edu.itm.sistemaacademico.models;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+import co.edu.itm.sistemaacademico.archivos.ArchivoEstudianteTexto;
 import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.Nodo;
 
@@ -7,16 +11,20 @@ public class SistemaAcademico {
     private ListaEnlazada estudiantes;
     private ListaEnlazada docentes;
     private ListaEnlazada cursos;
+    private ArchivoEstudianteTexto archivoEstudiante;
 
     public SistemaAcademico() {
         this.estudiantes = new ListaEnlazada();
         this.docentes = new ListaEnlazada();
         this.cursos = new ListaEnlazada();
+        this.archivoEstudiante = new ArchivoEstudianteTexto("estudiantes.txt");
+        this.archivoEstudiante.crearArchivoEstudiante();
     }
 
     // Metodos para crear estudiantes - Create
     public void agregarEstudiante(Estudiante estudiante) {
         this.estudiantes.agregarElementoAlFinal(estudiante);
+        this.archivoEstudiante.guardarEstudiante(estudiante);
     }
 
     public void agregarEstudiante(Estudiante estudiante, boolean alInicio) {
@@ -25,6 +33,7 @@ public class SistemaAcademico {
         } else {
             this.estudiantes.agregarElementoAlFinal(estudiante);
         }
+        this.archivoEstudiante.guardarEstudiante(estudiante);
     }
 
     // Metodo para listar estudiantes - Read
@@ -117,6 +126,24 @@ public class SistemaAcademico {
         return null; // Retorna null si no se encuentra el curso
     }
 
-    // Aca va el metodo eliminar curso - Delete
+    public void cargarEstudiantes() {
+        try (BufferedReader lector = new BufferedReader(new FileReader("estudiantes.txt"))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String[] datos = linea.split(";");
+                if (datos.length != 4) {
+                    continue;
+                }
+                String identificacion = datos[0];
+                String nombre = datos[1];
+                String apellido = datos[2];
+                String direccion = datos[3];
+                Estudiante estudiante = new Estudiante(nombre, apellido, identificacion, direccion);
+                this.estudiantes.agregarElementoAlFinal(estudiante);
+            }
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al leer el archivo. NO SE CARGARON LOS ESTUDIANTES.");
+        }
+    }
 
 }
