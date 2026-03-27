@@ -61,12 +61,36 @@ public class SistemaAcademico {
     }
 
     // Metodo para actualizar la dirección de un estudiante - Update
-    public void actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
+    public boolean actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(identificacion);
         if (estudiante != null) {
             estudiante.setDireccion(nuevaDireccion);
+            this.archivoEstudiante.actualizarEstudiante(estudiante);
+            System.out.println("Dirección actualizada correctamente.");
+            return true;
         } else {
             System.out.println("Estudiante con identificación " + identificacion + " no encontrado.");
+            return false;
+        }
+    }
+
+    public void EliminarEstudiantePorIdentificacion(String identificacion) {
+        if (this.estudiantes.getCabeza() == null) {
+            return;
+        }
+        if ((Estudiante) this.estudiantes.getCabeza().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
+            this.estudiantes.eliminarElementoAlInicio();
+            this.archivoEstudiante.eliminarEstudiante(identificacion);
+            return;
+        }
+        Nodo nodoActual = this.estudiantes.getCabeza();
+        while (nodoActual.getSiguiente() != null) {
+            if ((Estudiante) nodoActual.getSiguiente().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
+                nodoActual.setSiguiente(nodoActual.getSiguiente().getSiguiente());
+                this.archivoEstudiante.eliminarEstudiante(identificacion);
+                return;
+            }
+            nodoActual = nodoActual.getSiguiente();
         }
     }
 
@@ -143,7 +167,7 @@ public class SistemaAcademico {
             }
         } catch (Exception e) {
             System.out.println("Ocurrió un error al leer el archivo. NO SE CARGARON LOS ESTUDIANTES.");
+            e.printStackTrace(); // Imprime la traza del error para diagnóstico
         }
     }
-
 }

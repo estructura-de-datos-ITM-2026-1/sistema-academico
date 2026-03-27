@@ -40,9 +40,67 @@ public class ArchivoEstudianteTexto {
     }
 
     public void guardarEstudiante(Estudiante estudiante) {
-        String linea = estudiante.getIdentificacion() + ";" + estudiante.getNombre() + ";" + estudiante.getApellido()
+        escribirTexto(construirLinea(estudiante));
+    }
+
+    public boolean actualizarEstudiante(Estudiante estudianteActualizado) {
+        String nuevaLinea = construirLinea(estudianteActualizado);
+
+        File archivoOriginal = new File(this.nombreArchivo);
+        File archivoTemporal = new File(this.nombreArchivo + ".tmp");
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
+                BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemporal))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String identificacion = linea.split(";")[0]; // Extrae la identificación de la línea
+                if (identificacion != null && identificacion.equals(estudianteActualizado.getIdentificacion())) {
+
+                    escritor.write(nuevaLinea);
+                    escritor.newLine();
+
+                    continue;
+                }
+                escritor.write(linea);
+                escritor.newLine();
+            }
+            archivoOriginal.delete();
+            archivoTemporal.renameTo(archivoOriginal);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al leer el archivo");
+            e.printStackTrace(); // Imprime la traza del error para diagnóstico
+            return false;
+        }
+    }
+
+    public boolean eliminarEstudiante(String identificacionAEliminar) {
+        File archivoOriginal = new File(this.nombreArchivo);
+        File archivoTemporal = new File(this.nombreArchivo + ".tmp");
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
+                BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemporal))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String identificacion = linea.split(";")[0]; // Extrae la identificación de la línea
+                if (identificacion != null && identificacion.equals(identificacionAEliminar)) {
+                    continue;
+                }
+                escritor.write(linea);
+                escritor.newLine();
+            }
+            archivoOriginal.delete();
+            archivoTemporal.renameTo(archivoOriginal);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al leer el archivo");
+            e.printStackTrace(); // Imprime la traza del error para diagnóstico
+            return false;
+        }
+    }
+
+    private String construirLinea(Estudiante estudiante) {
+        return estudiante.getIdentificacion() + ";" + estudiante.getNombre() + ";" + estudiante.getApellido()
                 + ";" + estudiante.getDireccion();
-        escribirTexto(linea);
     }
 
     public void leerTexto() {

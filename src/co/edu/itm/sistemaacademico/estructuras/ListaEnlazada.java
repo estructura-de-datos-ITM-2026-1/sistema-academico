@@ -61,4 +61,14 @@ public class ListaEnlazada {
         this.tamaño++;
     }
 
+    public void eliminarElementoAlInicio() {
+        if (this.cabeza == null) {
+            return; // La lista está vacía, no hay nada que eliminar
+        }
+        this.cabeza = this.cabeza.getSiguiente(); // La cabeza ahora apunta al siguiente nodo, eliminando la referencia
+                                                  // al nodo anterior
+                                                  // nodo anterior
+        this.tamaño--; // Decrementar el tamaño de la lista
+    }
+
 }
