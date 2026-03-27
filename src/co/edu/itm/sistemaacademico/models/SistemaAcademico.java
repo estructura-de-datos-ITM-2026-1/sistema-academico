@@ -125,25 +125,4 @@ public class SistemaAcademico {
         }
         return null; // Retorna null si no se encuentra el curso
     }
-
-    public void cargarEstudiantes() {
-        try (BufferedReader lector = new BufferedReader(new FileReader("estudiantes.txt"))) {
-            String linea;
-            while ((linea = lector.readLine()) != null) {
-                String[] datos = linea.split(";");
-                if (datos.length != 4) {
-                    continue;
-                }
-                String identificacion = datos[0];
-                String nombre = datos[1];
-                String apellido = datos[2];
-                String direccion = datos[3];
-                Estudiante estudiante = new Estudiante(nombre, apellido, identificacion, direccion);
-                this.estudiantes.agregarElementoAlFinal(estudiante);
-            }
-        } catch (Exception e) {
-            System.out.println("Ocurrió un error al leer el archivo. NO SE CARGARON LOS ESTUDIANTES.");
-        }
-    }
-
 }

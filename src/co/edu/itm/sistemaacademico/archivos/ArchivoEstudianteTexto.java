@@ -36,6 +36,7 @@ public class ArchivoEstudianteTexto {
             System.out.println("Texto escrito en el archivo: " + texto);
         } catch (Exception e) {
             System.out.println("Ocurrió un error al escribir en el archivo.");
+            e.printStackTrace(); // Imprime la traza del error para diagnóstico
         }
     }
 
@@ -43,16 +44,5 @@ public class ArchivoEstudianteTexto {
         String linea = estudiante.getIdentificacion() + ";" + estudiante.getNombre() + ";" + estudiante.getApellido()
                 + ";" + estudiante.getDireccion();
         escribirTexto(linea);
-    }
-
-    public void leerTexto() {
-        try (BufferedReader lector = new BufferedReader(new FileReader(this.nombreArchivo))) {
-            String linea;
-            while ((linea = lector.readLine()) != null) {
-                System.out.println(linea);
-            }
-        } catch (Exception e) {
-            System.out.println("Ocurrió un error al leer el archivo.");
-        }
     }
 }
