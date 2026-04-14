@@ -6,12 +6,14 @@ import java.io.FileReader;
 import co.edu.itm.sistemaacademico.archivos.ArchivoEstudianteTexto;
 import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.Nodo;
+import co.edu.itm.sistemaacademico.estructuras.Pila;
 
 public class SistemaAcademico {
     private ListaEnlazada estudiantes;
     private ListaEnlazada docentes;
     private ListaEnlazada cursos;
     private ArchivoEstudianteTexto archivoEstudiante;
+    private Pila historial;
 
     public SistemaAcademico() {
         this.estudiantes = new ListaEnlazada();
@@ -19,12 +21,18 @@ public class SistemaAcademico {
         this.cursos = new ListaEnlazada();
         this.archivoEstudiante = new ArchivoEstudianteTexto("estudiantes.txt");
         this.archivoEstudiante.crearArchivoEstudiante();
+        this.historial = new Pila();
     }
 
     // Metodos para crear estudiantes - Create
     public void agregarEstudiante(Estudiante estudiante) {
         this.estudiantes.agregarElementoAlFinal(estudiante);
         this.archivoEstudiante.guardarEstudiante(estudiante);
+        this.historial.push(new Operacion(
+                "AGREGAR_ESTUDIANTE",
+                "Se agregó al estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                        + " (ID: " + estudiante.getIdentificacion() + ")",
+                null));
     }
 
     public void agregarEstudiante(Estudiante estudiante, boolean alInicio) {
@@ -34,6 +42,11 @@ public class SistemaAcademico {
             this.estudiantes.agregarElementoAlFinal(estudiante);
         }
         this.archivoEstudiante.guardarEstudiante(estudiante);
+        this.historial.push(new Operacion(
+                "AGREGAR_ESTUDIANTE",
+                "Se agregó al estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                        + " (ID: " + estudiante.getIdentificacion() + ")",
+                null));
     }
 
     // Metodo para listar estudiantes - Read
@@ -64,8 +77,15 @@ public class SistemaAcademico {
     public boolean actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(identificacion);
         if (estudiante != null) {
+            String direccionAnterior = estudiante.getDireccion();
             estudiante.setDireccion(nuevaDireccion);
             this.archivoEstudiante.actualizarEstudiante(estudiante);
+            this.historial.push(new Operacion(
+                    "ACTUALIZAR_DIRECCION",
+                    "Se actualizó la dirección del estudiante " + estudiante.getNombre() + " "
+                            + estudiante.getApellido() + " (ID: " + identificacion + ")"
+                            + " de \"" + direccionAnterior + "\" a \"" + nuevaDireccion + "\"",
+                    new Object[] { estudiante, direccionAnterior }));
             System.out.println("Dirección actualizada correctamente.");
             return true;
         } else {
@@ -78,14 +98,28 @@ public class SistemaAcademico {
         if (this.estudiantes.getCabeza() == null) {
             return;
         }
-        if ((Estudiante) this.estudiantes.getCabeza().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
+        Estudiante estudianteAEliminar = buscarEstudiantePorIdentificacion(identificacion);
+        if (estudianteAEliminar == null) {
+            return;
+        }
+        if ((Estudiante) this.estudiantes.getCabeza().getDato() == estudianteAEliminar) {
             this.estudiantes.eliminarElementoAlInicio();
+            this.historial.push(new Operacion(
+                    "ELIMINAR_ESTUDIANTE",
+                    "Se eliminó al estudiante " + estudianteAEliminar.getNombre() + " "
+                            + estudianteAEliminar.getApellido() + " (ID: " + identificacion + ")",
+                    estudianteAEliminar));
             return;
         }
         Nodo nodoActual = this.estudiantes.getCabeza();
         while (nodoActual.getSiguiente() != null) {
-            if ((Estudiante) nodoActual.getSiguiente().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
+            if ((Estudiante) nodoActual.getSiguiente().getDato() == estudianteAEliminar) {
                 nodoActual.setSiguiente(nodoActual.getSiguiente().getSiguiente());
+                this.historial.push(new Operacion(
+                        "ELIMINAR_ESTUDIANTE",
+                        "Se eliminó al estudiante " + estudianteAEliminar.getNombre() + " "
+                                + estudianteAEliminar.getApellido() + " (ID: " + identificacion + ")",
+                        estudianteAEliminar));
                 return;
             }
             nodoActual = nodoActual.getSiguiente();
@@ -124,6 +158,10 @@ public class SistemaAcademico {
     // CRUD para cursos
     public void agregarCurso(Curso curso) {
         this.cursos.agregarElementoAlFinal(curso);
+        this.historial.push(new Operacion(
+                "AGREGAR_CURSO",
+                "Se agregó el curso \"" + curso.getNombreCurso() + "\" (código: " + curso.getCodigoCurso() + ")",
+                null));
     }
 
     public void listarCursos() {
@@ -146,6 +184,63 @@ public class SistemaAcademico {
             nodoActual = nodoActual.getSiguiente();
         }
         return null; // Retorna null si no se encuentra el curso
+    }
+
+    // Historial de operaciones
+    public void mostrarHistorial() {
+        if (this.historial.isEmpty()) {
+            System.out.println("El historial de operaciones está vacío.");
+            return;
+        }
+        System.out.println("=== HISTORIAL DE OPERACIONES (" + this.historial.getTamaño() + ") ===");
+        Pila copia = new Pila();
+        while (!this.historial.isEmpty()) {
+            Operacion op = (Operacion) this.historial.pop();
+            op.mostrarInformacion();
+            copia.push(op);
+        }
+        // Restaurar la pila original
+        while (!copia.isEmpty()) {
+            this.historial.push(copia.pop());
+        }
+    }
+
+    public void deshacerUltimaOperacion() {
+        if (this.historial.isEmpty()) {
+            System.out.println("No hay operaciones para deshacer.");
+            return;
+        }
+        Operacion ultima = (Operacion) this.historial.pop();
+        switch (ultima.getTipo()) {
+            case "AGREGAR_ESTUDIANTE":
+                // No tenemos referencia directa al objeto agregado en datosAntes,
+                // por lo que extraemos la descripción para informar al usuario.
+                System.out.println("No se puede deshacer automáticamente la operación: " + ultima.getDescripcion());
+                break;
+            case "ELIMINAR_ESTUDIANTE":
+                Estudiante estudianteRestaurado = (Estudiante) ultima.getDatosAntes();
+                this.estudiantes.agregarElementoAlFinal(estudianteRestaurado);
+                this.archivoEstudiante.guardarEstudiante(estudianteRestaurado);
+                System.out.println("Operación deshecha: se restauró al estudiante "
+                        + estudianteRestaurado.getNombre() + " " + estudianteRestaurado.getApellido());
+                break;
+            case "ACTUALIZAR_DIRECCION":
+                Object[] datos = (Object[]) ultima.getDatosAntes();
+                Estudiante estudianteActualizar = (Estudiante) datos[0];
+                String direccionAnterior = (String) datos[1];
+                estudianteActualizar.setDireccion(direccionAnterior);
+                this.archivoEstudiante.actualizarEstudiante(estudianteActualizar);
+                System.out.println("Operación deshecha: se restauró la dirección de "
+                        + estudianteActualizar.getNombre() + " " + estudianteActualizar.getApellido()
+                        + " a \"" + direccionAnterior + "\"");
+                break;
+            case "AGREGAR_CURSO":
+                System.out.println("No se puede deshacer automáticamente la operación: " + ultima.getDescripcion());
+                break;
+            default:
+                System.out.println("Tipo de operación desconocido: " + ultima.getTipo());
+                break;
+        }
     }
 
     public void cargarEstudiantes() {

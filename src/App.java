@@ -17,7 +17,9 @@ public class App {
             7. Listar cursos matriculados por estudiante
             8. Listar cursos
             9. Eliminar estudiante
-            10. Salir
+            10. Ver historial de operaciones
+            11. Deshacer última operación
+            12. Salir
             """;
 
     public static void main(String[] args) throws Exception {
@@ -99,6 +101,12 @@ public class App {
                     sistemaAcademico.EliminarEstudiantePorIdentificacion(idEliminar);
                     break;
                 case 10:
+                    sistemaAcademico.mostrarHistorial();
+                    break;
+                case 11:
+                    sistemaAcademico.deshacerUltimaOperacion();
+                    break;
+                case 12:
                     System.out.println("Saliendo del sistema académico...");
                     return;
                 default:

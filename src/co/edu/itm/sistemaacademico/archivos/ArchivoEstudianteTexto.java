@@ -81,7 +81,33 @@ public class ArchivoEstudianteTexto {
     }
 
     public boolean eliminarEstudiante(String identificacionAEliminar) {
-        return true;
+        File archivoOriginal = new File(this.nombreArchivo);
+        File archivoTemporal = new File(this.nombreArchivo + ".tmp");
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
+                BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemporal))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String identificacion = linea.split(";")[0]; // Extrae la identificación de la línea
+                if (identificacion != null && identificacion.equals(identificacionAEliminar)) {
+                    continue;
+                }
+                escritor.write(linea);
+                escritor.newLine();
+            }
+            if (!archivoOriginal.delete()) {
+                System.out.println("No se pudo eliminar el archivo original.");
+                return false;
+            }
+            if (!archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("No se pudo renombrar el archivo temporal.");
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al leer el archivo");
+            e.printStackTrace(); // Imprime la traza del error para diagnóstico
+            return false;
+        }
     }
 
     private String construirLinea(Estudiante estudiante) {
