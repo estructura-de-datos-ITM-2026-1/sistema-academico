@@ -64,8 +64,14 @@ public class ArchivoEstudianteTexto {
                 escritor.write(linea);
                 escritor.newLine();
             }
-            archivoOriginal.delete();
-            archivoTemporal.renameTo(archivoOriginal);
+            if (!archivoOriginal.delete()) {
+                System.out.println("No se pudo eliminar el archivo original.");
+                return false;
+            }
+            if (!archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("No se pudo renombrar el archivo temporal.");
+                return false;
+            }
             return true;
         } catch (Exception e) {
             System.out.println("Ocurrió un error al leer el archivo");
@@ -88,8 +94,14 @@ public class ArchivoEstudianteTexto {
                 escritor.write(linea);
                 escritor.newLine();
             }
-            archivoOriginal.delete();
-            archivoTemporal.renameTo(archivoOriginal);
+            if (!archivoOriginal.delete()) {
+                System.out.println("No se pudo eliminar el archivo original.");
+                return false;
+            }
+            if (!archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("No se pudo renombrar el archivo temporal.");
+                return false;
+            }
             return true;
         } catch (Exception e) {
             System.out.println("Ocurrió un error al leer el archivo");
