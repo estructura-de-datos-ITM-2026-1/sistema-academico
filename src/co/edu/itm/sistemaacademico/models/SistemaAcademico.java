@@ -80,14 +80,12 @@ public class SistemaAcademico {
         }
         if ((Estudiante) this.estudiantes.getCabeza().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
             this.estudiantes.eliminarElementoAlInicio();
-            this.archivoEstudiante.eliminarEstudiante(identificacion);
             return;
         }
         Nodo nodoActual = this.estudiantes.getCabeza();
         while (nodoActual.getSiguiente() != null) {
             if ((Estudiante) nodoActual.getSiguiente().getDato() == buscarEstudiantePorIdentificacion(identificacion)) {
                 nodoActual.setSiguiente(nodoActual.getSiguiente().getSiguiente());
-                this.archivoEstudiante.eliminarEstudiante(identificacion);
                 return;
             }
             nodoActual = nodoActual.getSiguiente();
