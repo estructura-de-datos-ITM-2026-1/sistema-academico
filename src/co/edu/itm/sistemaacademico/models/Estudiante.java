@@ -33,12 +33,6 @@ public class Estudiante extends Persona {
     }
 
     public boolean matricularCurso(Curso curso) {
-        if (curso.estaLleno()) {
-            curso.agregarAColaEspera(this);
-            System.out.println("El curso " + curso.getNombreCurso() + " está lleno. "
-                    + getNombre() + " " + getApellido() + " fue agregado a la cola de espera.");
-            return false;
-        }
         cursosMatriculados.agregarElementoAlFinal(curso);
         curso.agregarEstudiante(this);
         return true;
@@ -63,14 +57,6 @@ public class Estudiante extends Persona {
         }
         // Eliminar el estudiante de la lista del curso
         curso.eliminarEstudiante(this);
-        // Matricular automáticamente al siguiente en la cola de espera
-        Estudiante siguiente = curso.siguienteEnCola();
-        if (siguiente != null) {
-            siguiente.matricularCurso(curso);
-            System.out.println("El estudiante " + siguiente.getNombre() + " " + siguiente.getApellido()
-                    + " fue matriculado automáticamente en " + curso.getNombreCurso()
-                    + " desde la cola de espera.");
-        }
     }
 
     public void listarCursosMatriculados() {

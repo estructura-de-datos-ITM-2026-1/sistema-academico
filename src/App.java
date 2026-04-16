@@ -18,10 +18,7 @@ public class App {
             8. Listar cursos
             9. Eliminar estudiante
             10. Ver historial de operaciones
-            11. Deshacer última operación
-            12. Ver cola de espera de un curso
-            13. Cancelar matrícula de estudiante en curso
-            14. Salir
+            11. Salir
             """;
 
     public static void main(String[] args) throws Exception {
@@ -94,23 +91,10 @@ public class App {
                     sistemaAcademico.mostrarHistorial();
                     break;
                 case 11:
-                    sistemaAcademico.deshacerUltimaOperacion();
-                    break;
-                case 12:
-                    int codigoColaEspera = ConsoleUtil.leerEntero("Ingrese el código del curso:");
-                    sistemaAcademico.listarColaEsperaCurso(codigoColaEspera);
-                    break;
-                case 13:
-                    String idCancelar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
-                    int codigoCancelar = ConsoleUtil.leerEntero("Ingrese el código del curso:");
-                    sistemaAcademico.cancelarCursoEstudiante(idCancelar, codigoCancelar);
-                    break;
-                case 14:
                     System.out.println("Saliendo del sistema académico...");
                     return;
                 default:
                     System.out.println("Opción no válida. Por favor, intente de nuevo.");
-                    break;
             }
 
         }
