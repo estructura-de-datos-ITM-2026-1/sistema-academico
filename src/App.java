@@ -91,12 +91,10 @@ public class App {
                     sistemaAcademico.EliminarEstudiantePorIdentificacion(idEliminar);
                     break;
                 case 10:
-                    // TODO: disponible tras merge con feature/historial-operaciones
-                    System.out.println("Funcionalidad disponible próximamente.");
+                    sistemaAcademico.mostrarHistorial();
                     break;
                 case 11:
-                    // TODO: disponible tras merge con feature/historial-operaciones
-                    System.out.println("Funcionalidad disponible próximamente.");
+                    sistemaAcademico.deshacerUltimaOperacion();
                     break;
                 case 12:
                     int codigoColaEspera = ConsoleUtil.leerEntero("Ingrese el código del curso:");
