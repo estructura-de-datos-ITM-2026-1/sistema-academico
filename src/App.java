@@ -19,7 +19,9 @@ public class App {
             9. Eliminar estudiante
             10. Ver historial de operaciones
             11. Deshacer última operación
-            12. Salir
+            12. Ver cola de espera de un curso
+            13. Cancelar matrícula de estudiante en curso
+            14. Salir
             """;
 
     public static void main(String[] args) throws Exception {
@@ -68,20 +70,8 @@ public class App {
                     break;
                 case 6:
                     String idMatricular = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
-                    Estudiante estudianteMatricular = sistemaAcademico.buscarEstudiantePorIdentificacion(idMatricular);
-                    if (estudianteMatricular == null) {
-                        System.out.println("Estudiante con identificación " + idMatricular + " no encontrado.");
-                        break;
-                    }
                     int codigoMatricular = ConsoleUtil.leerEntero("Ingrese el código del curso:");
-                    Curso cursoMatricular = sistemaAcademico.buscarCursoPorCodigo(codigoMatricular);
-                    if (cursoMatricular == null) {
-                        System.out.println("Curso con código " + codigoMatricular + " no encontrado.");
-                        break;
-                    }
-                    estudianteMatricular.matricularCurso(cursoMatricular);
-                    System.out.println("Estudiante " + estudianteMatricular.getNombre() + " matriculado en el curso "
-                            + cursoMatricular.getNombreCurso());
+                    sistemaAcademico.matricularEstudianteEnCurso(idMatricular, codigoMatricular);
                     break;
                 case 7:
                     String idListar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
@@ -101,12 +91,23 @@ public class App {
                     sistemaAcademico.EliminarEstudiantePorIdentificacion(idEliminar);
                     break;
                 case 10:
-                    sistemaAcademico.mostrarHistorial();
+                    // TODO: disponible tras merge con feature/historial-operaciones
+                    System.out.println("Funcionalidad disponible próximamente.");
                     break;
                 case 11:
-                    sistemaAcademico.deshacerUltimaOperacion();
+                    // TODO: disponible tras merge con feature/historial-operaciones
+                    System.out.println("Funcionalidad disponible próximamente.");
                     break;
                 case 12:
+                    int codigoColaEspera = ConsoleUtil.leerEntero("Ingrese el código del curso:");
+                    sistemaAcademico.listarColaEsperaCurso(codigoColaEspera);
+                    break;
+                case 13:
+                    String idCancelar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int codigoCancelar = ConsoleUtil.leerEntero("Ingrese el código del curso:");
+                    sistemaAcademico.cancelarCursoEstudiante(idCancelar, codigoCancelar);
+                    break;
+                case 14:
                     System.out.println("Saliendo del sistema académico...");
                     return;
                 default:

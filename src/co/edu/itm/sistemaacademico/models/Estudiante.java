@@ -32,16 +32,45 @@ public class Estudiante extends Persona {
         this.semestre = semestre;
     }
 
-    public void matricularCurso(Curso curso) {
-        // Agregar el curso a la lista de cursos matriculados
+    public boolean matricularCurso(Curso curso) {
+        if (curso.estaLleno()) {
+            curso.agregarAColaEspera(this);
+            System.out.println("El curso " + curso.getNombreCurso() + " está lleno. "
+                    + getNombre() + " " + getApellido() + " fue agregado a la cola de espera.");
+            return false;
+        }
         cursosMatriculados.agregarElementoAlFinal(curso);
-        // Agregar el estudiante a la lista de estudiantes matriculados del curso
         curso.agregarEstudiante(this);
+        return true;
     }
 
     public void cancelarCurso(Curso curso) {
-        // Eliminar el curso
-
+        // Eliminar el curso de la lista del estudiante
+        Nodo nodoActual = cursosMatriculados.getCabeza();
+        if (nodoActual == null) {
+            return;
+        }
+        if (nodoActual.getDato() == curso) {
+            cursosMatriculados.eliminarElementoAlInicio();
+        } else {
+            while (nodoActual.getSiguiente() != null) {
+                if (nodoActual.getSiguiente().getDato() == curso) {
+                    nodoActual.setSiguiente(nodoActual.getSiguiente().getSiguiente());
+                    break;
+                }
+                nodoActual = nodoActual.getSiguiente();
+            }
+        }
+        // Eliminar el estudiante de la lista del curso
+        curso.eliminarEstudiante(this);
+        // Matricular automáticamente al siguiente en la cola de espera
+        Estudiante siguiente = curso.siguienteEnCola();
+        if (siguiente != null) {
+            siguiente.matricularCurso(curso);
+            System.out.println("El estudiante " + siguiente.getNombre() + " " + siguiente.getApellido()
+                    + " fue matriculado automáticamente en " + curso.getNombreCurso()
+                    + " desde la cola de espera.");
+        }
     }
 
     public void listarCursosMatriculados() {

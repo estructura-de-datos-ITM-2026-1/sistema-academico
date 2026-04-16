@@ -161,6 +161,55 @@ public class SistemaAcademico {
         return null; // Retorna null si no se encuentra el curso
     }
 
+    // 4a — Cola de espera
+    public void listarColaEsperaCurso(int codigoCurso) {
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        if (curso == null) {
+            System.out.println("Curso con código " + codigoCurso + " no encontrado.");
+            return;
+        }
+        curso.listarColaEspera();
+    }
+
+    // 4b — Cancelar matrícula con propagación automática desde la cola
+    public void cancelarCursoEstudiante(String idEstudiante, int codigoCurso) {
+        Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
+        if (estudiante == null) {
+            System.out.println("Estudiante con identificación " + idEstudiante + " no encontrado.");
+            return;
+        }
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        if (curso == null) {
+            System.out.println("Curso con código " + codigoCurso + " no encontrado.");
+            return;
+        }
+        estudiante.cancelarCurso(curso);
+        // TODO (4c): registrar CANCELAR_CURSO en historial al hacer merge con feature/historial-operaciones
+        System.out.println("El estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                + " canceló su matrícula en el curso " + curso.getNombreCurso() + ".");
+    }
+
+    // 4b/4c — Matricular con registro diferenciado en historial
+    public void matricularEstudianteEnCurso(String idEstudiante, int codigoCurso) {
+        Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
+        if (estudiante == null) {
+            System.out.println("Estudiante con identificación " + idEstudiante + " no encontrado.");
+            return;
+        }
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        if (curso == null) {
+            System.out.println("Curso con código " + codigoCurso + " no encontrado.");
+            return;
+        }
+        boolean matriculado = estudiante.matricularCurso(curso);
+        // TODO (4c): push MATRICULAR_CURSO o ENCOLAR_ESTUDIANTE según resultado,
+        //            al hacer merge con feature/historial-operaciones
+        if (matriculado) {
+            System.out.println("Estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                    + " matriculado en el curso " + curso.getNombreCurso() + ".");
+        }
+    }
+
     public void cargarEstudiantes() {
         try (BufferedReader lector = new BufferedReader(new FileReader("estudiantes.txt"))) {
             String linea;
