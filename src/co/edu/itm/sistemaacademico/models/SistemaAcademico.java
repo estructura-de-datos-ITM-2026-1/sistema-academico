@@ -83,8 +83,7 @@ public class SistemaAcademico {
             this.historial.push(new Operacion(
                     "ACTUALIZAR_DIRECCION",
                     "Se actualizó la dirección de " + estudiante.getNombre() + " " + estudiante.getApellido()
-                            + " (ID: " + identificacion + ") de \"" + direccionAnterior + "\" a \"" + nuevaDireccion
-                            + "\"",
+                            + " (ID: " + identificacion + ") de \"" + direccionAnterior + "\" a \"" + nuevaDireccion + "\"",
                     new Object[] { estudiante, direccionAnterior }));
             System.out.println("Dirección actualizada correctamente.");
             return true;
@@ -186,6 +185,17 @@ public class SistemaAcademico {
         return null; // Retorna null si no se encuentra el curso
     }
 
+    // 4a — Cola de espera
+    public void listarColaEsperaCurso(int codigoCurso) {
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        if (curso == null) {
+            System.out.println("Curso con código " + codigoCurso + " no encontrado.");
+            return;
+        }
+        curso.listarColaEspera();
+    }
+
+    // 4b — Cancelar matrícula con propagación automática desde la cola
     public void cancelarCursoEstudiante(String idEstudiante, int codigoCurso) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
         if (estudiante == null) {
@@ -207,6 +217,7 @@ public class SistemaAcademico {
                 + " canceló su matrícula en el curso " + curso.getNombreCurso() + ".");
     }
 
+    // 4b/4c — Matricular con registro diferenciado en historial
     public void matricularEstudianteEnCurso(String idEstudiante, int codigoCurso) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
         if (estudiante == null) {
@@ -218,7 +229,23 @@ public class SistemaAcademico {
             System.out.println("Curso con código " + codigoCurso + " no encontrado.");
             return;
         }
-        estudiante.matricularCurso(curso);
+        boolean matriculado = estudiante.matricularCurso(curso);
+        if (matriculado) {
+            this.historial.push(new Operacion(
+                    "MATRICULAR_CURSO",
+                    "El estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                            + " (ID: " + idEstudiante + ") se matriculó en \"" + curso.getNombreCurso() + "\"",
+                    null));
+            System.out.println("Estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                    + " matriculado en el curso " + curso.getNombreCurso() + ".");
+        } else {
+            this.historial.push(new Operacion(
+                    "ENCOLAR_ESTUDIANTE",
+                    "El estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
+                            + " (ID: " + idEstudiante + ") fue puesto en cola de espera en \""
+                            + curso.getNombreCurso() + "\"",
+                    null));
+        }
     }
 
     // Historial de operaciones
@@ -236,6 +263,45 @@ public class SistemaAcademico {
         }
         while (!copia.isEmpty()) {
             this.historial.push(copia.pop());
+        }
+    }
+
+    public void deshacerUltimaOperacion() {
+        if (this.historial.isEmpty()) {
+            System.out.println("No hay operaciones para deshacer.");
+            return;
+        }
+        Operacion ultima = (Operacion) this.historial.pop();
+        switch (ultima.getTipo()) {
+            case "AGREGAR_ESTUDIANTE":
+                System.out.println("No se puede deshacer automáticamente: " + ultima.getDescripcion());
+                break;
+            case "ELIMINAR_ESTUDIANTE":
+                Estudiante estudianteRestaurado = (Estudiante) ultima.getDatosAntes();
+                this.estudiantes.agregarElementoAlFinal(estudianteRestaurado);
+                this.archivoEstudiante.guardarEstudiante(estudianteRestaurado);
+                System.out.println("Operación deshecha: se restauró al estudiante "
+                        + estudianteRestaurado.getNombre() + " " + estudianteRestaurado.getApellido());
+                break;
+            case "ACTUALIZAR_DIRECCION":
+                Object[] datos = (Object[]) ultima.getDatosAntes();
+                Estudiante estudianteActualizar = (Estudiante) datos[0];
+                String direccionAnterior = (String) datos[1];
+                estudianteActualizar.setDireccion(direccionAnterior);
+                this.archivoEstudiante.actualizarEstudiante(estudianteActualizar);
+                System.out.println("Operación deshecha: se restauró la dirección de "
+                        + estudianteActualizar.getNombre() + " " + estudianteActualizar.getApellido()
+                        + " a \"" + direccionAnterior + "\"");
+                break;
+            case "AGREGAR_CURSO":
+            case "MATRICULAR_CURSO":
+            case "ENCOLAR_ESTUDIANTE":
+            case "CANCELAR_CURSO":
+                System.out.println("No se puede deshacer automáticamente: " + ultima.getDescripcion());
+                break;
+            default:
+                System.out.println("Tipo de operación desconocido: " + ultima.getTipo());
+                break;
         }
     }
 

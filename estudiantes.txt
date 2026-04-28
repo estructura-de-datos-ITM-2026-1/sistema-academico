@@ -1,3 +1,0 @@
-1;Santiago;Suarez;Calle 100
-2;Karol;Quintero;Calle 10
-3;Camilo;Morales;Calle 2
