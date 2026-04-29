@@ -1,14 +1,16 @@
 package co.edu.itm.sistemaacademico.models;
 
 import co.edu.itm.sistemaacademico.estructuras.Cola;
+import co.edu.itm.sistemaacademico.estructuras.ListaDoblementeEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.Nodo;
+import co.edu.itm.sistemaacademico.estructuras.NodoDoble;
 
 public class Curso {
     private int codigoCurso;
     private String nombreCurso;
     private int creditos;
-    private String horario;
+    private ListaDoblementeEnlazada horariosDisponibles;
     private String aula;
     private Docente docente;
     private ListaEnlazada estudiantesMatriculados;
@@ -19,6 +21,7 @@ public class Curso {
         this.estudiantesMatriculados = new ListaEnlazada();
         this.cupoMaximo = 0;
         this.colaEspera = new Cola();
+        this.horariosDisponibles = new ListaDoblementeEnlazada();
     }
 
     public Curso(int codigoCurso, String nombreCurso, int creditos, int cupoMaximo) {
@@ -28,6 +31,7 @@ public class Curso {
         this.cupoMaximo = cupoMaximo;
         this.estudiantesMatriculados = new ListaEnlazada();
         this.colaEspera = new Cola();
+        this.horariosDisponibles = new ListaDoblementeEnlazada();
     }
 
     public int getCodigoCurso() {
@@ -54,12 +58,12 @@ public class Curso {
         this.creditos = creditos;
     }
 
-    public String getHorario() {
-        return horario;
+    public ListaDoblementeEnlazada getHorariosDisponibles() {
+        return horariosDisponibles;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void agregarHorario(Horario horario) {
+        this.horariosDisponibles.agregarAlFinal(horario);
     }
 
     public String getAula() {
@@ -117,7 +121,8 @@ public class Curso {
             System.out.println("No hay estudiantes en cola de espera para el curso " + nombreCurso + ".");
             return;
         }
-        System.out.println("Cola de espera del curso " + nombreCurso + " (" + colaEspera.getTamaño() + " estudiante(s)):");
+        System.out.println(
+                "Cola de espera del curso " + nombreCurso + " (" + colaEspera.getTamaño() + " estudiante(s)):");
         Cola copia = new Cola();
         while (!colaEspera.isEmpty()) {
             Estudiante estudiante = (Estudiante) colaEspera.dequeue();
@@ -158,6 +163,16 @@ public class Curso {
         System.out.println("Cupo máximo: " + cupoMaximo);
         System.out.println("Cupos disponibles: " + getCuposDisponibles());
         System.out.println("Estudiantes en cola de espera: " + colaEspera.getTamaño());
+        System.out.println("Horarios disponibles (" + horariosDisponibles.getTamaño() + "):");
+        NodoDoble actual = horariosDisponibles.getCabeza();
+        int i = 1;
+        while (actual != null) {
+            Horario h = (Horario) actual.getDato();
+            System.out.println("  " + i + ". días=" + h.getDias()
+                    + " " + h.getHoraInicio() + "h-" + h.getHoraFin() + "h");
+            actual = actual.getSiguiente();
+            i++;
+        }
     }
 
 }

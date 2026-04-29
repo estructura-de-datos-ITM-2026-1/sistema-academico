@@ -1,18 +1,18 @@
 package co.edu.itm.sistemaacademico.models;
 
 public class Horario {
-    private int dia;
+    private String dias;
     private int horaInicio;
     private int horaFin;
 
-    public Horario(int dia, int horaInicio, int horaFin) {
-        this.dia = dia;
+    public Horario(String dias, int horaInicio, int horaFin) {
+        this.dias = dias;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
     }
 
-    public int getDia() {
-        return dia;
+    public String getDias() {
+        return dias;
     }
 
     public int getHoraInicio() {
@@ -23,8 +23,8 @@ public class Horario {
         return horaFin;
     }
 
-    public void setDia(int dia) {
-        this.dia = dia;
+    public void setDias(String dias) {
+        this.dias = dias;
     }
 
     public void setHoraInicio(int horaInicio) {
