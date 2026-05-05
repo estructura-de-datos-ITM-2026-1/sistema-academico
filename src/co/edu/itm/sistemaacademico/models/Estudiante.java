@@ -60,16 +60,15 @@ public class Estudiante extends Persona {
             cursosMatriculados.eliminarElementoAlInicio();
             horariosSeleccionados.eliminarElementoAlInicio();
         } else {
-            Nodo prevHorario = nodoHorario;
             while (nodoCurso.getSiguiente() != null) {
                 if (nodoCurso.getSiguiente().getDato() == curso) {
-                    horarioEliminado = (Horario) prevHorario.getSiguiente().getDato();
+                    horarioEliminado = (Horario) nodoHorario.getSiguiente().getDato();
                     nodoCurso.setSiguiente(nodoCurso.getSiguiente().getSiguiente());
-                    prevHorario.setSiguiente(prevHorario.getSiguiente().getSiguiente());
+                    nodoHorario.setSiguiente(nodoHorario.getSiguiente().getSiguiente());
                     break;
                 }
                 nodoCurso = nodoCurso.getSiguiente();
-                prevHorario = prevHorario.getSiguiente();
+                nodoHorario = nodoHorario.getSiguiente();
             }
         }
         // Eliminar el estudiante de la lista del curso
@@ -90,7 +89,10 @@ public class Estudiante extends Persona {
         Nodo nodoHorario = horariosSeleccionados.getCabeza();
         while (nodoCurso != null) {
             Curso curso = (Curso) nodoCurso.getDato();
-            Horario horario = (Horario) (nodoHorario != null ? nodoHorario.getDato() : null);
+            Horario horario = null;
+            if (nodoHorario != null) {
+                horario = (Horario) nodoHorario.getDato();
+            }
             String horarioTxt = horario == null
                     ? "sin horario"
                     : "días=" + horario.getDias() + " " + horario.getHoraInicio() + "h-" + horario.getHoraFin() + "h";
