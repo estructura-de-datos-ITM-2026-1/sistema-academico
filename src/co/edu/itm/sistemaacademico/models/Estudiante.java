@@ -8,12 +8,14 @@ public class Estudiante extends Persona {
     private float promedio;
     private int semestre;
     private ListaEnlazada cursosMatriculados;
+    private ListaEnlazada horariosSeleccionados;
 
     public Estudiante(String nombre, String apellido, String identificacion, String direccion) {
         super(nombre, apellido, identificacion, direccion);
         this.promedio = 0.0f;
         this.semestre = 1;
         this.cursosMatriculados = new ListaEnlazada();
+        this.horariosSeleccionados = new ListaEnlazada();
     }
 
     public float getPromedio() {
@@ -32,7 +34,7 @@ public class Estudiante extends Persona {
         this.semestre = semestre;
     }
 
-    public boolean matricularCurso(Curso curso) {
+    public boolean matricularCurso(Curso curso, Horario horarioElegido) {
         if (curso.estaLleno()) {
             curso.agregarAColaEspera(this);
             System.out.println("El curso " + curso.getNombreCurso() + " está lleno. "
@@ -40,25 +42,34 @@ public class Estudiante extends Persona {
             return false;
         }
         cursosMatriculados.agregarElementoAlFinal(curso);
+        horariosSeleccionados.agregarElementoAlFinal(horarioElegido);
         curso.agregarEstudiante(this);
         return true;
     }
 
     public void cancelarCurso(Curso curso) {
-        // Eliminar el curso de la lista del estudiante
-        Nodo nodoActual = cursosMatriculados.getCabeza();
-        if (nodoActual == null) {
+        // Eliminar el curso (y su horario asociado) de la lista del estudiante
+        Nodo nodoCurso = cursosMatriculados.getCabeza();
+        Nodo nodoHorario = horariosSeleccionados.getCabeza();
+        if (nodoCurso == null) {
             return;
         }
-        if (nodoActual.getDato() == curso) {
+        Horario horarioEliminado = null;
+        if (nodoCurso.getDato() == curso) {
+            horarioEliminado = (Horario) nodoHorario.getDato();
             cursosMatriculados.eliminarElementoAlInicio();
+            horariosSeleccionados.eliminarElementoAlInicio();
         } else {
-            while (nodoActual.getSiguiente() != null) {
-                if (nodoActual.getSiguiente().getDato() == curso) {
-                    nodoActual.setSiguiente(nodoActual.getSiguiente().getSiguiente());
+            Nodo prevHorario = nodoHorario;
+            while (nodoCurso.getSiguiente() != null) {
+                if (nodoCurso.getSiguiente().getDato() == curso) {
+                    horarioEliminado = (Horario) prevHorario.getSiguiente().getDato();
+                    nodoCurso.setSiguiente(nodoCurso.getSiguiente().getSiguiente());
+                    prevHorario.setSiguiente(prevHorario.getSiguiente().getSiguiente());
                     break;
                 }
-                nodoActual = nodoActual.getSiguiente();
+                nodoCurso = nodoCurso.getSiguiente();
+                prevHorario = prevHorario.getSiguiente();
             }
         }
         // Eliminar el estudiante de la lista del curso
@@ -66,7 +77,7 @@ public class Estudiante extends Persona {
         // Matricular automáticamente al siguiente en la cola de espera
         Estudiante siguiente = curso.siguienteEnCola();
         if (siguiente != null) {
-            siguiente.matricularCurso(curso);
+            siguiente.matricularCurso(curso, horarioEliminado);
             System.out.println("El estudiante " + siguiente.getNombre() + " " + siguiente.getApellido()
                     + " fue matriculado automáticamente en " + curso.getNombreCurso()
                     + " desde la cola de espera.");
@@ -75,11 +86,19 @@ public class Estudiante extends Persona {
 
     public void listarCursosMatriculados() {
         System.out.println("Cursos matriculados por " + getNombre() + " " + getApellido() + ":");
-        Nodo nodoActual = cursosMatriculados.getCabeza();
-        while (nodoActual != null) {
-            Curso curso = (Curso) nodoActual.getDato();
-            System.out.println("- " + curso.getNombreCurso());
-            nodoActual = nodoActual.getSiguiente();
+        Nodo nodoCurso = cursosMatriculados.getCabeza();
+        Nodo nodoHorario = horariosSeleccionados.getCabeza();
+        while (nodoCurso != null) {
+            Curso curso = (Curso) nodoCurso.getDato();
+            Horario horario = (Horario) (nodoHorario != null ? nodoHorario.getDato() : null);
+            String horarioTxt = horario == null
+                    ? "sin horario"
+                    : "días=" + horario.getDias() + " " + horario.getHoraInicio() + "h-" + horario.getHoraFin() + "h";
+            System.out.println("- " + curso.getNombreCurso() + " | " + horarioTxt);
+            nodoCurso = nodoCurso.getSiguiente();
+            if (nodoHorario != null) {
+                nodoHorario = nodoHorario.getSiguiente();
+            }
         }
     }
 
