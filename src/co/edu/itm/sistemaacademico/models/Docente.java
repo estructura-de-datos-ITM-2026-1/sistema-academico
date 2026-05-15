@@ -7,7 +7,7 @@ public class Docente extends Persona {
     private int numeroCursos;
 
     // Constructor con parámetros
-    public Docente(String nombre, String apellido, String identificacion, int numeroCursos, String direccion) {
+    public Docente(String nombre, String apellido, int identificacion, int numeroCursos, String direccion) {
         super(nombre, apellido, identificacion, direccion);
         this.fechaVinculacion = LocalDate.now();
         this.numeroCursos = numeroCursos;

@@ -55,7 +55,7 @@ public class ArchivoEstudianteTexto {
             String linea;
             while ((linea = lector.readLine()) != null) {
                 String identificacion = linea.split(";")[0]; // Extrae la identificación de la línea
-                if (identificacion != null && identificacion.equals(estudianteActualizado.getIdentificacion())) {
+                if (identificacion != null && Integer.parseInt(identificacion) == estudianteActualizado.getIdentificacion()) {
 
                     escritor.write(nuevaLinea);
                     escritor.newLine();
@@ -80,7 +80,7 @@ public class ArchivoEstudianteTexto {
         }
     }
 
-    public boolean eliminarEstudiante(String identificacionAEliminar) {
+    public boolean eliminarEstudiante(int identificacionAEliminar) {
         File archivoOriginal = new File(this.nombreArchivo);
         File archivoTemporal = new File(this.nombreArchivo + ".tmp");
         try (BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
@@ -88,7 +88,7 @@ public class ArchivoEstudianteTexto {
             String linea;
             while ((linea = lector.readLine()) != null) {
                 String identificacion = linea.split(";")[0]; // Extrae la identificación de la línea
-                if (identificacion != null && identificacion.equals(identificacionAEliminar)) {
+                if (identificacion != null && Integer.parseInt(identificacion) == identificacionAEliminar) {
                     continue;
                 }
                 escritor.write(linea);

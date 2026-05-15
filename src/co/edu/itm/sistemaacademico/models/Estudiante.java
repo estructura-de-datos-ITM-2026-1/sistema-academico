@@ -10,7 +10,7 @@ public class Estudiante extends Persona {
     private ListaEnlazada cursosMatriculados;
     private ListaEnlazada horariosSeleccionados;
 
-    public Estudiante(String nombre, String apellido, String identificacion, String direccion) {
+    public Estudiante(String nombre, String apellido, int identificacion, String direccion) {
         super(nombre, apellido, identificacion, direccion);
         this.promedio = 0.0f;
         this.semestre = 1;

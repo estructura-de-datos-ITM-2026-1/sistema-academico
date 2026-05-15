@@ -7,6 +7,7 @@ import co.edu.itm.sistemaacademico.archivos.ArchivoEstudianteTexto;
 import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.Nodo;
 import co.edu.itm.sistemaacademico.estructuras.Pila;
+import co.edu.itm.sistemaacademico.utils.CursoUtil;
 
 public class SistemaAcademico {
     private ListaEnlazada estudiantes;
@@ -61,11 +62,11 @@ public class SistemaAcademico {
     }
 
     // Metodo para buscar un estudiante por su identificacion - Read
-    public Estudiante buscarEstudiantePorIdentificacion(String identificacion) {
+    public Estudiante buscarEstudiantePorIdentificacion(int identificacion) {
         Nodo nodoActual = this.estudiantes.getCabeza();
         while (nodoActual != null) {
             Estudiante estudiante = (Estudiante) nodoActual.getDato();
-            if (estudiante.getIdentificacion().equals(identificacion)) {
+            if (estudiante.getIdentificacion() == identificacion) {
                 return estudiante;
             }
             nodoActual = nodoActual.getSiguiente();
@@ -74,7 +75,7 @@ public class SistemaAcademico {
     }
 
     // Metodo para actualizar la dirección de un estudiante - Update
-    public boolean actualizarDireccionEstudiante(String identificacion, String nuevaDireccion) {
+    public boolean actualizarDireccionEstudiante(int identificacion, String nuevaDireccion) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(identificacion);
         if (estudiante != null) {
             String direccionAnterior = estudiante.getDireccion();
@@ -93,7 +94,7 @@ public class SistemaAcademico {
         }
     }
 
-    public void EliminarEstudiantePorIdentificacion(String identificacion) {
+    public void EliminarEstudiantePorIdentificacion(int identificacion) {
         if (this.estudiantes.getCabeza() == null) {
             return;
         }
@@ -140,11 +141,11 @@ public class SistemaAcademico {
         }
     }
 
-    public Docente buscarDocentePorIdentificacion(String identificacion) {
+    public Docente buscarDocentePorIdentificacion(int identificacion) {
         Nodo nodoActual = this.docentes.getCabeza();
         while (nodoActual != null) {
             Docente docente = (Docente) nodoActual.getDato();
-            if (docente.getIdentificacion().equals(identificacion)) {
+            if (docente.getIdentificacion() == identificacion) {
                 return docente;
             }
             nodoActual = nodoActual.getSiguiente();
@@ -196,7 +197,7 @@ public class SistemaAcademico {
     }
 
     // 4b — Cancelar matrícula con propagación automática desde la cola
-    public void cancelarCursoEstudiante(String idEstudiante, int codigoCurso) {
+    public void cancelarCursoEstudiante(int idEstudiante, int codigoCurso) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
         if (estudiante == null) {
             System.out.println("Estudiante con identificación " + idEstudiante + " no encontrado.");
@@ -218,7 +219,7 @@ public class SistemaAcademico {
     }
 
     // 4b/4c — Matricular con registro diferenciado en historial
-    public void matricularEstudianteEnCurso(String idEstudiante, int codigoCurso) {
+    public void matricularEstudianteEnCurso(int idEstudiante, int codigoCurso) {
         Estudiante estudiante = buscarEstudiantePorIdentificacion(idEstudiante);
         if (estudiante == null) {
             System.out.println("Estudiante con identificación " + idEstudiante + " no encontrado.");
@@ -229,15 +230,24 @@ public class SistemaAcademico {
             System.out.println("Curso con código " + codigoCurso + " no encontrado.");
             return;
         }
-        boolean matriculado = estudiante.matricularCurso(curso);
+        Horario horarioElegido = null;
+        if (!curso.estaLleno()) {
+            horarioElegido = CursoUtil.seleccionarHorarioInteractivo(curso);
+        }
+        boolean matriculado = estudiante.matricularCurso(curso, horarioElegido);
         if (matriculado) {
+            String horarioTxt = horarioElegido == null
+                    ? ""
+                    : " | horario días=" + horarioElegido.getDias()
+                            + " " + horarioElegido.getHoraInicio() + "h-" + horarioElegido.getHoraFin() + "h";
             this.historial.push(new Operacion(
                     "MATRICULAR_CURSO",
                     "El estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
-                            + " (ID: " + idEstudiante + ") se matriculó en \"" + curso.getNombreCurso() + "\"",
+                            + " (ID: " + idEstudiante + ") se matriculó en \"" + curso.getNombreCurso() + "\""
+                            + horarioTxt,
                     null));
             System.out.println("Estudiante " + estudiante.getNombre() + " " + estudiante.getApellido()
-                    + " matriculado en el curso " + curso.getNombreCurso() + ".");
+                    + " matriculado en el curso " + curso.getNombreCurso() + horarioTxt + ".");
         } else {
             this.historial.push(new Operacion(
                     "ENCOLAR_ESTUDIANTE",
@@ -313,7 +323,7 @@ public class SistemaAcademico {
                 if (datos.length != 4) {
                     continue;
                 }
-                String identificacion = datos[0];
+                int identificacion = Integer.parseInt(datos[0]);
                 String nombre = datos[1];
                 String apellido = datos[2];
                 String direccion = datos[3];

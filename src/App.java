@@ -50,7 +50,7 @@ public class App {
                     System.out.println("Curso agregado: " + curso.getNombreCurso());
                     break;
                 case 3:
-                    String identificacion = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int identificacion = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     Estudiante estudianteBuscado = sistemaAcademico.buscarEstudiantePorIdentificacion(identificacion);
                     if (estudianteBuscado != null) {
                         System.out.println("Estudiante encontrado:");
@@ -60,7 +60,7 @@ public class App {
                     }
                     break;
                 case 4:
-                    String idActualizar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int idActualizar = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     String nuevaDireccion = ConsoleUtil.leerLinea("Ingrese la nueva dirección del estudiante:");
                     sistemaAcademico.actualizarDireccionEstudiante(idActualizar, nuevaDireccion);
                     break;
@@ -69,12 +69,12 @@ public class App {
                     sistemaAcademico.listarEstudiantes();
                     break;
                 case 6:
-                    String idMatricular = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int idMatricular = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     int codigoMatricular = ConsoleUtil.leerEntero("Ingrese el código del curso:");
                     sistemaAcademico.matricularEstudianteEnCurso(idMatricular, codigoMatricular);
                     break;
                 case 7:
-                    String idListar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int idListar = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     Estudiante estudianteListar = sistemaAcademico.buscarEstudiantePorIdentificacion(idListar);
                     if (estudianteListar == null) {
                         System.out.println("Estudiante con identificación " + idListar + " no encontrado.");
@@ -87,7 +87,7 @@ public class App {
                     sistemaAcademico.listarCursos();
                     break;
                 case 9:
-                    String idEliminar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int idEliminar = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     sistemaAcademico.EliminarEstudiantePorIdentificacion(idEliminar);
                     break;
                 case 10:
@@ -101,7 +101,7 @@ public class App {
                     sistemaAcademico.listarColaEsperaCurso(codigoColaEspera);
                     break;
                 case 13:
-                    String idCancelar = ConsoleUtil.leerLinea("Ingrese la identificación del estudiante:");
+                    int idCancelar = ConsoleUtil.leerEntero("Ingrese la identificación del estudiante:");
                     int codigoCancelar = ConsoleUtil.leerEntero("Ingrese el código del curso:");
                     sistemaAcademico.cancelarCursoEstudiante(idCancelar, codigoCancelar);
                     break;

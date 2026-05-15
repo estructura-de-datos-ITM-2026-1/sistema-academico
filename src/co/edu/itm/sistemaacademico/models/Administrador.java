@@ -3,7 +3,7 @@ package co.edu.itm.sistemaacademico.models;
 public class Administrador extends Persona {
     private String facultad;
 
-    public Administrador(String nombre, String apellido, String facultad, String identificacion, String direccion) {
+    public Administrador(String nombre, String apellido, String facultad, int identificacion, String direccion) {
         super(nombre, apellido, identificacion, direccion);
         this.facultad = facultad;
     }

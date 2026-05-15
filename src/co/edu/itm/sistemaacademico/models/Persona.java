@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Persona {
     private String nombre;
     private String apellido;
-    private String identificacion;
+    private int identificacion;
     private LocalDate fechaNacimiento;
     private String direccion;
     private String telefono;
@@ -14,14 +14,14 @@ public class Persona {
     public Persona() {
     }
 
-    public Persona(String nombre, String apellido, String identificacion, String direccion) {
+    public Persona(String nombre, String apellido, int identificacion, String direccion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.identificacion = identificacion;
         this.direccion = direccion;
     }
 
-    public Persona(String nombre, String apellido, String identificacion, LocalDate fechaNacimiento, String direccion,
+    public Persona(String nombre, String apellido, int identificacion, LocalDate fechaNacimiento, String direccion,
             String telefono,
             String correo) {
         this.nombre = nombre;
@@ -80,11 +80,11 @@ public class Persona {
         this.correo = correo;
     }
 
-    public String getIdentificacion() {
+    public int getIdentificacion() {
         return identificacion;
     }
 
-    public void setIdentificacion(String identificacion) {
+    public void setIdentificacion(int identificacion) {
         this.identificacion = identificacion;
     }
 
