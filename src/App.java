@@ -1,4 +1,5 @@
 import co.edu.itm.sistemaacademico.models.Curso;
+import co.edu.itm.sistemaacademico.models.Docente;
 import co.edu.itm.sistemaacademico.models.Estudiante;
 import co.edu.itm.sistemaacademico.models.SistemaAcademico;
 import co.edu.itm.sistemaacademico.utils.ConsoleUtil;
@@ -21,7 +22,12 @@ public class App {
             11. Deshacer última operación
             12. Ver cola de espera de un curso
             13. Cancelar matrícula de estudiante en curso
-            14. Salir
+            14. Agregar docente
+            15. Listar docentes
+            16. Buscar docente por identificación
+            17. Eliminar docente
+            18. Asignar docente a curso
+            19. Salir
             """;
 
     public static void main(String[] args) throws Exception {
@@ -106,6 +112,38 @@ public class App {
                     sistemaAcademico.cancelarCursoEstudiante(idCancelar, codigoCancelar);
                     break;
                 case 14:
+                    String nombreDocente = ConsoleUtil.leerLinea("Ingrese el nombre del docente:");
+                    String apellidoDocente = ConsoleUtil.leerLinea("Ingrese el apellido del docente:");
+                    int idDocente = ConsoleUtil.leerEntero("Ingrese la identificación del docente:");
+                    int numeroCursos = ConsoleUtil.leerEntero("Ingrese el número de cursos del docente:");
+                    String direccionDocente = ConsoleUtil.leerLinea("Ingrese la dirección del docente:");
+                    sistemaAcademico.agregarDocente(new Docente(nombreDocente, apellidoDocente, idDocente, numeroCursos, direccionDocente));
+                    System.out.println("Docente agregado: " + nombreDocente + " " + apellidoDocente);
+                    break;
+                case 15:
+                    System.out.println("Lista de docentes:");
+                    sistemaAcademico.listarDocentes();
+                    break;
+                case 16:
+                    int idBuscarDocente = ConsoleUtil.leerEntero("Ingrese la identificación del docente:");
+                    Docente docenteBuscado = sistemaAcademico.buscarDocentePorIdentificacion(idBuscarDocente);
+                    if (docenteBuscado != null) {
+                        System.out.println("Docente encontrado:");
+                        docenteBuscado.mostrarInformacion();
+                    } else {
+                        System.out.println("Docente con identificación " + idBuscarDocente + " no encontrado.");
+                    }
+                    break;
+                case 17:
+                    int idEliminarDocente = ConsoleUtil.leerEntero("Ingrese la identificación del docente:");
+                    sistemaAcademico.eliminarDocente(idEliminarDocente);
+                    break;
+                case 18:
+                    int codigoAsignar = ConsoleUtil.leerEntero("Ingrese el código del curso:");
+                    int idDocenteAsignar = ConsoleUtil.leerEntero("Ingrese la identificación del docente:");
+                    sistemaAcademico.asignarDocenteACurso(codigoAsignar, idDocenteAsignar);
+                    break;
+                case 19:
                     System.out.println("Saliendo del sistema académico...");
                     return;
                 default:
