@@ -10,6 +10,9 @@ public class App {
         raiz = insertarRecursivo(raiz, 3);
         raiz = insertarRecursivo(raiz, 10);
         raiz = insertarRecursivo(raiz, 6);
+        raiz = insertarRecursivo(raiz, 1);
+        raiz = insertarRecursivo(raiz, 14);
+        raiz = insertarRecursivo(raiz, 9);
     }
 
     public static NodoArbol insertarRecursivo(NodoArbol nodo, int dato) {
@@ -25,5 +28,59 @@ public class App {
         return nodo; // Retorna el nodo sin cambios si el dato ya existe
     }
 
+    private NodoArbol minimoNodo(NodoArbol nodo) {
+        while (nodo.getIzquierdo() != null) { // Desciende hacia la izquierda hasta llegar al nodo sin hijo izquierdo
+            nodo = nodo.getIzquierdo(); // Avanza al hijo izquierdo en cada iteración
+        }
+        return nodo; // El nodo más a la izquierda es el de menor identificación
+    }
+
+    public void recorridoInorden(NodoArbol nodo) {
+        if (nodo == null) { // Caso base: nodo vacío, no hay nada que imprimir
+            return;
+        }
+        recorridoInorden(nodo.getIzquierdo()); // Recorre primero el subárbol izquierdo (identificaciones menores)
+        System.out.println(nodo.getDato());
+        recorridoInorden(nodo.getDerecho()); // Recorre después el subárbol derecho (identificaciones mayores)
+    }
+
+    private NodoArbol buscarRecursivo(NodoArbol nodo, int dato) {
+        if (nodo == null) { // Caso base: se llegó a un nodo vacío, no se encontró
+            return null;
+        }
+        Docente actual = (Docente) nodo.getDato(); // Cast del dato del nodo actual a Docente
+        if (dato == actual.getDato()) { // Se encontró el nodo con la identificación buscada
+            return nodo;
+        } else if (dato < actual.getDato()) { // La clave buscada es menor: continúa en el subárbol
+                                                                  // izquierdo
+            return buscarRecursivo(nodo.getIzquierdo(), dato);
+        } else { // La clave buscada es mayor: continúa en el subárbol derecho
+            return buscarRecursivo(nodo.getDerecho(), dato);
+        }
+    }
+
+    private NodoArbol eliminarRecursivo(NodoArbol nodo, int dato) {
+        if (nodo == null) { // Caso base: se llegó a un nodo vacío, no hay nada que eliminar
+            return null;
+        }
+        if (identificacion < nodo.getDato()) { // El nodo a eliminar está en el subárbol izquierdo
+            nodo.setIzquierdo(eliminarRecursivo(nodo.getIzquierdo(), identificacion));
+        } else if (identificacion > nodo.getDato()) { // El nodo a eliminar está en el subárbol derecho
+            nodo.setDerecho(eliminarRecursivo(nodo.getDerecho(), identificacion));
+        } else {
+            // Se encontró el nodo a eliminar; se evalúa cuál de los tres casos aplica
+            if (nodo.getIzquierdo() == null) { // Caso 1: sin hijos y 2a: sin hijo izquierdo, se reemplaza con el hijo derecho o null
+                return nodo.getDerecho();
+            } // Caso 2b: sin hijo derecho, se reemplaza con el hijo izquierdo
+
+            // Caso 3: nodo con dos hijos
+            
+        }
+        return nodo; 
+    }
+
 }
+
+
+
 ```
