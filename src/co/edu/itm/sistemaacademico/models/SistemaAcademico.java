@@ -3,7 +3,9 @@ package co.edu.itm.sistemaacademico.models;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import co.edu.itm.sistemaacademico.archivos.ArchivoDocenteTexto;
 import co.edu.itm.sistemaacademico.archivos.ArchivoEstudianteTexto;
+import co.edu.itm.sistemaacademico.estructuras.ArbolDocentes;
 import co.edu.itm.sistemaacademico.estructuras.ListaEnlazada;
 import co.edu.itm.sistemaacademico.estructuras.Nodo;
 import co.edu.itm.sistemaacademico.estructuras.Pila;
@@ -11,17 +13,20 @@ import co.edu.itm.sistemaacademico.utils.CursoUtil;
 
 public class SistemaAcademico {
     private ListaEnlazada estudiantes;
-    private ListaEnlazada docentes;
+    private ArbolDocentes docentes;
     private ListaEnlazada cursos;
     private ArchivoEstudianteTexto archivoEstudiante;
+    private ArchivoDocenteTexto archivoDocente;
     private Pila historial;
 
     public SistemaAcademico() {
         this.estudiantes = new ListaEnlazada();
-        this.docentes = new ListaEnlazada();
+        this.docentes = new ArbolDocentes();
         this.cursos = new ListaEnlazada();
         this.archivoEstudiante = new ArchivoEstudianteTexto("estudiantes.txt");
         this.archivoEstudiante.crearArchivoEstudiante();
+        this.archivoDocente = new ArchivoDocenteTexto("docentes.txt");
+        this.archivoDocente.crearArchivoDocente();
         this.historial = new Pila();
     }
 
@@ -128,32 +133,58 @@ public class SistemaAcademico {
 
     // CRUD para docentes
     public void agregarDocente(Docente docente) {
-        this.docentes.agregarElementoAlFinal(docente);
+        this.docentes.insertar(docente);
+        this.archivoDocente.guardarDocente(docente);
+        this.historial.push(new Operacion(
+                "AGREGAR_DOCENTE",
+                "Se agregó al docente " + docente.getNombre() + " " + docente.getApellido()
+                        + " (ID: " + docente.getIdentificacion() + ")",
+                null));
     }
 
     public void listarDocentes() {
-        Nodo nodoActual = this.docentes.getCabeza();
-        while (nodoActual != null) {
-            Docente docente = (Docente) nodoActual.getDato();
-            System.out.println("DATOS DEL DOCENTE:");
-            docente.mostrarInformacion();
-            nodoActual = nodoActual.getSiguiente();
-        }
+        this.docentes.recorridoInorden(this.docentes.getRaiz());
     }
 
     public Docente buscarDocentePorIdentificacion(int identificacion) {
-        Nodo nodoActual = this.docentes.getCabeza();
-        while (nodoActual != null) {
-            Docente docente = (Docente) nodoActual.getDato();
-            if (docente.getIdentificacion() == identificacion) {
-                return docente;
-            }
-            nodoActual = nodoActual.getSiguiente();
-        }
-        return null; // Retorna null si no se encuentra el docente
+        return (Docente) this.docentes.buscar(identificacion);
     }
 
-    // Aca va el metodo eliminar docente - Delete
+    public void eliminarDocente(int identificacion) {
+        Docente docente = buscarDocentePorIdentificacion(identificacion);
+        if (docente == null) {
+            System.out.println("Docente con identificación " + identificacion + " no encontrado.");
+            return;
+        }
+        this.docentes.eliminar(identificacion);
+        this.archivoDocente.eliminarDocente(identificacion);
+        this.historial.push(new Operacion(
+                "ELIMINAR_DOCENTE",
+                "Se eliminó al docente " + docente.getNombre() + " " + docente.getApellido()
+                        + " (ID: " + identificacion + ")",
+                docente));
+    }
+
+    public void asignarDocenteACurso(int codigoCurso, int idDocente) {
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        if (curso == null) {
+            System.out.println("Curso con código " + codigoCurso + " no encontrado.");
+            return;
+        }
+        Docente docente = buscarDocentePorIdentificacion(idDocente);
+        if (docente == null) {
+            System.out.println("Docente con identificación " + idDocente + " no encontrado.");
+            return;
+        }
+        curso.setDocente(docente);
+        this.historial.push(new Operacion(
+                "ASIGNAR_DOCENTE",
+                "Se asignó al docente " + docente.getNombre() + " " + docente.getApellido()
+                        + " (ID: " + idDocente + ") al curso \"" + curso.getNombreCurso() + "\"",
+                null));
+        System.out.println("Docente " + docente.getNombre() + " " + docente.getApellido()
+                + " asignado al curso " + curso.getNombreCurso() + ".");
+    }
 
     // CRUD para cursos
     public void agregarCurso(Curso curso) {
@@ -312,6 +343,27 @@ public class SistemaAcademico {
             default:
                 System.out.println("Tipo de operación desconocido: " + ultima.getTipo());
                 break;
+        }
+    }
+
+    public void cargarDocentes() {
+        try (BufferedReader lector = new BufferedReader(new FileReader("docentes.txt"))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String[] datos = linea.split(";");
+                if (datos.length != 5) {
+                    continue;
+                }
+                int identificacion = Integer.parseInt(datos[0]);
+                String nombre = datos[1];
+                String apellido = datos[2];
+                int numeroCursos = Integer.parseInt(datos[3]);
+                String direccion = datos[4];
+                this.docentes.insertar(new Docente(nombre, apellido, identificacion, numeroCursos, direccion));
+            }
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al leer el archivo. NO SE CARGARON LOS DOCENTES.");
+            e.printStackTrace();
         }
     }
 

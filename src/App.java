@@ -33,7 +33,8 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         SistemaAcademico sistemaAcademico = new SistemaAcademico();
-        sistemaAcademico.cargarEstudiantes(); // Carga los estudiantes desde el archivo al iniciar el programa
+        sistemaAcademico.cargarEstudiantes();
+        sistemaAcademico.cargarDocentes(); // Carga los estudiantes desde el archivo al iniciar el programa
 
         System.out.println("¡Bienvenido al sistema académico!");
 

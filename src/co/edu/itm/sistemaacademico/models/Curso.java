@@ -163,6 +163,12 @@ public class Curso {
         System.out.println("Cupo máximo: " + cupoMaximo);
         System.out.println("Cupos disponibles: " + getCuposDisponibles());
         System.out.println("Estudiantes en cola de espera: " + colaEspera.getTamaño());
+        if (docente != null) {
+            System.out.println("Docente: " + docente.getNombre() + " " + docente.getApellido()
+                    + " (ID: " + docente.getIdentificacion() + ")");
+        } else {
+            System.out.println("Docente: sin asignar");
+        }
         System.out.println("Horarios disponibles (" + horariosDisponibles.getTamaño() + "):");
         NodoDoble actual = horariosDisponibles.getCabeza();
         int i = 1;
